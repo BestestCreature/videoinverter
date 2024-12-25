@@ -39,5 +39,5 @@
     }
 
 
-    setInterval(checkStreamTitle, 3000);
+    setInterval(checkStreamTitle, 1000);
 })();
