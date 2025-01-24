@@ -27,7 +27,7 @@
 
 
     function checkStreamTitle() {
-        const titleElement = document.querySelector('h2[data-a-target="stream-title"]');
+        const titleElement = document.querySelector('[data-a-target="stream-title"]');
         if (titleElement) {
             const title = titleElement.getAttribute('title');
             if (title && title.includes('!script')) {
@@ -39,5 +39,5 @@
     }
 
 
-    setInterval(checkStreamTitle, 1000);
+    setInterval(checkStreamTitle, 5000);
 })();
