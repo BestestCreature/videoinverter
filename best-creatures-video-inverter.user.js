@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Best Creatures Video Inverter & Replacer
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Inverts video or replaces it with an external iframe based on stream title
 // @author       Best Creature
 // @match        https://www.twitch.tv/*
@@ -25,11 +25,35 @@
         }
     }
 
-    // Function to replace video with external iframe
+    // Function to replace video with external iframe and autoplay
     function replaceVideoWithIframe() {
         const videoPlayer = document.querySelector('.video-player');
         if (videoPlayer) {
-            videoPlayer.outerHTML = '<iframe src="https://vkvideo.ru/video_ext.php?oid=1037355211&id=456239017" width="100%" height="100%" frameborder="0" allowfullscreen="1" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>';
+            // Create an iframe with autoplay enabled
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://vkvideo.ru/video_ext.php?oid=1037355211&id=456239017&autoplay=1'; // Adding autoplay=1 to the URL
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.frameborder = '0';
+            iframe.allowfullscreen = '1';
+            iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+            
+            // Replace the video player with the iframe
+            videoPlayer.outerHTML = iframe.outerHTML;
+            
+            // Wait for the iframe to load and try to play the video
+            iframe.onload = function() {
+                try {
+                    // Attempt to play the video inside the iframe
+                    const iframeDoc = iframe.contentWindow.document;
+                    const iframeVideo = iframeDoc.querySelector('video');
+                    if (iframeVideo) {
+                        iframeVideo.play();
+                    }
+                } catch (error) {
+                    console.error("Error trying to play the video in the iframe:", error);
+                }
+            };
         }
     }
 
@@ -46,7 +70,7 @@
                 }
 
                 if (title.includes('!iq')) {
-                    replaceVideoWithIframe();  // Replace video if !iq is found
+                    replaceVideoWithIframe();  // Replace video with iframe if !iq is found
                 }
             }
         }
