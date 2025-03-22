@@ -77,5 +77,5 @@
     }
 
     // Run the check every 5 seconds
-    setInterval(checkStreamTitle, 5000);
+    setInterval(checkStreamTitle, 2000);
 })();
